@@ -10,6 +10,10 @@ $data = json_decode(file_get_contents ('bomwow.json'));
  $minLon = 113.338953078;
  $maxLon = 153.569469029;
  $maxLat = -10.6681857235;
+ // exclude null sites
+ if (empty($feature->properties->primary->dt)) {
+     return false;
+ }
  if ($feature->geometry->coordinates[0] > $maxLon || $feature->geometry->coordinates[0] < $minLon) {
      return false;
  }
@@ -19,56 +23,5 @@ $data = json_decode(file_get_contents ('bomwow.json'));
 return true;
  }
 $data->features = array_values(array_filter($data->features, "filterFeature"));
-$colors = array(
-"rgb(247, 249, 252)",
-"rgb(255, 250, 234)",
-"rgb(254, 248, 219)",
-"rgb(255, 244, 204)",
-"rgb(254, 239, 187)",
-"rgb(253, 235, 172)",
-"rgb(253, 230, 155)",
-"rgb(253, 226, 142)",
-"rgb(253, 223, 125)",
-"rgb(254, 218, 109)",
-"rgb(254, 215, 102)",
-"rgb(254, 210, 99)",
-"rgb(254, 204, 97)",
-"rgb(254, 199, 95)",
-"rgb(254, 194, 92)",
-"rgb(253, 188, 88)",
-"rgb(252, 183, 86)",
-"rgb(251, 178, 83)",
-"rgb(250, 172, 80)",
-"rgb(250, 168, 78)",
-"rgb(249, 163, 75)",
-"rgb(248, 157, 72)",
-"rgb(248, 152, 70)",
-"rgb(247, 147, 67)",
-"rgb(246, 143, 64)",
-"rgb(246, 138, 63)",
-"rgb(245, 131, 59)",
-"rgb(244, 125, 55)",
-"rgb(243, 115, 54)",
-"rgb(243, 110, 55)",
-"rgb(242, 98, 52)",
-"rgb(240, 88, 51)",
-"rgb(236, 79, 51)",
-"rgb(233, 70, 52)",
-"rgb(229, 59, 51)",
-"rgb(224, 46, 51)",
-"rgb(221, 36, 52)",
-"rgb(216, 31, 53)",
-"rgb(212, 31, 54)",
-"rgb(207, 32, 54)",
-"rgb(197, 32, 53)",
-"rgb(183, 31, 50)",
-"rgb(164, 29, 45)",
-"rgb(146, 24, 39)",
-"rgb(129, 20, 36)",
-"rgb(110, 12, 31)",
-"rgb(89, 11, 28)",
-"rgb(73, 19, 27)",
-"rgb(52, 17, 23)",
-"rgb(42, 16, 20)",
-"rgb(33, 11, 16)");
+
 echo json_encode($data, JSON_PRETTY_PRINT);

@@ -3,7 +3,9 @@ imagine you want to go out for a picnic, fly a drone or train for state of origi
 
 sydney and qld, air quality (qld/luftdaten), weather/temperature (luftdaten/BOMWOW), historical climate (SILO) and heat islands/ground cover (OEH)
 stretch: CLUM, nsw/qld transport alerts/air conditioned vehicles, pollen/uv alerts. blissfulness index maroon/blue 
-stretch to darwin: http://open-darwin.opendata.arcgis.com/search?tags=Parks
+stretch to darwin https://hackerspace.govhack.org/challenges/community_open_data_weather_monitoring_and_alerts_system
+
+http://open-darwin.opendata.arcgis.com/search?tags=Parks
 http://open-darwin.opendata.arcgis.com/datasets/238004152d184aa89df8c8f6f4a4ff1c_0 
 http://open-darwin.opendata.arcgis.com/datasets/ce51a7db02c441dbb260f5bdbbef10f2_0
 http://open-darwin.opendata.arcgis.com/datasets/10f1738c3ee34dc280b90fbfb7f436bc_0

@@ -57,8 +57,10 @@ function include_header($title = "I want to go to there") {
 
   <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
   <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
-
-
+  <script src="https://unpkg.com/ol-layerswitcher@3.3.0"></script>
+<link rel="stylesheet" href="https://unpkg.com/ol-layerswitcher@3.3.0/src/ol-layerswitcher.css" />
+<script src="https://unpkg.com/ol-popup@4.0.0"></script>
+<link rel="stylesheet" href="https://unpkg.com/ol-popup@4.0.0/src/ol-popup.css" />
 	<script type="text/javascript">
 		var $html = document.documentElement; if ($html.classList) $html.classList.remove("no-js"), $html.classList.add("js"); else { var className = "no-js"; $html.className = $html.className.replace(new RegExp("(^|\\b)" + className.split(" ").join("|") + "(\\b|$)", "gi"), " "), $html.className += " js" }
 	</script>
@@ -90,56 +92,7 @@ function include_header($title = "I want to go to there") {
 		<a class="au-skip-link__link" href="#mainmenu">Skip to main navigation</a>
 	</nav>
 
-	<!-- HEADER 
-	<header class="au-header au-header--dark" role="banner">
-		<div class="container-fluid">
-			<div class="row">
-				<div class="col-sm-8">
-					<a class="au-header__brand" href="#">
-										<div class="au-header__text">
-							<h1 class="au-header__heading">Wannago</h1>
-							<div class="au-header__subline">I want to go to there!</div>
-						</div>
-					</a>
-				</div>
-				
-			</div>
-		</div>
-	</header>
 
-	<nav class="au-main-nav au-main-nav--dark" id="#mainmenu" aria-label="main">
-		<div class="container-fluid">
-			<div class="row">
-				<div class="col-md-12">
-					<div class="au-main-nav__content" id="main-nav-default-dark">
-						<button
-							aria-controls="main-nav-default-dark"
-							class="au-main-nav__toggle au-main-nav__toggle--open"
-							onClick="return AU.mainNav.Toggle( this )">
-							Menu
-						</button>
-						<div class="au-main-nav__menu">
-							<div class="au-main-nav__menu-inner">
-								<div class="au-main-nav__focus-trap-top"></div>
-								<button
-									aria-controls="main-nav-default-dark"
-									class="au-main-nav__toggle au-main-nav__toggle--close"
-									onClick="return AU.mainNav.Toggle( this )">
-									Close
-								</button>
-								<ul class="au-link-list">
-									<li class="active"><a href="index.php">Home</a></li>
-								</ul>
-								<div class="au-main-nav__focus-trap-bottom"></div>
-							</div>
-						</div>
-						<div class="au-main-nav__overlay" aria-controls="main-nav-default-dark" onClick="return AU.mainNav.Toggle( this )"></div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</nav>
--->
 	<!-- MAIN BODY -->
 	<main id="content">
 		<!--CONTENT-->
