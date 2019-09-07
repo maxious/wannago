@@ -2,7 +2,9 @@
 require_once("../lib.inc.php");
 api_headers();
 // wget https://maps.luftdaten.info/data/v2/data.dust.min.json
-// [{"id":4802280106,"sampling_rate":null,"timestamp":"2019-09-07 04:40:19","location":{"id":13208,"latitude":"51.044","longitude":"13.746","altitude":"","country":"DE","exact_location":0,"indoor":1},"sensor":{"id":36,"pin":"1","sensor_type":{"id":14,"name":"SDS011","manufacturer":"Nova Fitness"}},"sensordatavalues":[{"id":10195215297,"value":"40.80","value_type":"humidity"}]}]
+// [{"id":4802280106,"sampling_rate":null,"timestamp":"2019-09-07 04:40:19","location":{"id":13208,"latitude":"51.044","longitude":"13.746","altitude":"",
+    //"country":"DE","exact_location":0,"indoor":1},"sensor":{"id":36,"pin":"1","sensor_type":{"id":14,"name":"SDS011","manufacturer":"Nova Fitness"}},
+    //"sensordatavalues":[{"id":10195215297,"value":"40.80","value_type":"humidity"}]}]
 $j_data = json_decode(file_get_contents ('data.dust.min.json'));
 
  function filterFeature($feature) {
@@ -35,23 +37,32 @@ $geojson = array(
     'features'  => array()
  );
  # Loop through rows to build feature arrays
- foreach($data as $sitename => $rows) {
-     ksort($rows);
-     $row = array_reverse(array_values($rows))[0];
+ foreach($j_data as $row) {
+     
+     
+     $pm2_5= 0;
+     $pm10 = 0;
+     foreach($row->sensordatavalues as $value) {
+         if ($value->value_type == 'P2') {
+$pm2_5=$value->value;
+         } elseif ($value->value_type == 'P1') {
+                         $pm10=$value->value;
+         }
+     }
      $feature = array(
-         'id' => $sitename,
+         'id' => $row->id,
          'type' => 'Feature', 
          'geometry' => array(
              'type' => 'Point',
              # Pass Longitude and Latitude Columns here
-             'coordinates' => array($row->long, $row->lat)
+             'coordinates' => array($row->location->longitude, $row->location->latitude)
          ),
          # Pass other attribute columns here
          'properties' => array(
-             'name' => $row->name,
-             "pm2_5" => $row->pm2_5,
-             "pm10"=> $row->pm10,
-             "ts" => $row->ts
+             'name' => $row->id,
+             "pm2_5" => $pm2_5,
+             "pm10"=> $pm10,
+             "ts" => $row->timestamp
              )
          );
      # Add feature arrays to feature collection array

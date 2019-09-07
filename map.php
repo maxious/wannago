@@ -2,6 +2,14 @@
 require_once("lib.inc.php");
 include_header();
 ?>
+<style>
+.au-grid .container-fluid {
+    max-width: 100% !important;
+}
+main>.au-body {
+     padding: 0 !important;
+}
+</style>
 <div id="map" class="map"></div>
 <script>
     var weatherStyleFunction = function(feature) {
@@ -26,6 +34,7 @@ include_header();
 
     var weather = new ol.layer.Vector({
         title: 'BOM WOW weather',
+        type: "weather",
         source: new ol.source.Vector({
             format: new ol.format.GeoJSON(),
             url: './api/weather-bomwow.php'
@@ -37,27 +46,29 @@ include_header();
     });
 
     var dustStyleFunction = function(feature) {
-        var colors=[
-            [247, 249, 252],[255, 250, 234],[254, 248, 219],[255, 244, 204],[254, 239, 187],[253, 235, 172],[253, 230, 155],
-[253, 226, 142],[253, 223, 125],[254, 218, 109],[254, 215, 102],[254, 210, 99],[254, 204, 97],[254, 199, 95],[254, 194, 92],[253, 188, 88],[252, 183, 86],
-[251, 178, 83],[250, 172, 80],[250, 168, 78],[249, 163, 75],[248, 157, 72],[248, 152, 70],[247, 147, 67],[246, 143, 64],[246, 138, 63],
-[245, 131, 59],[244, 125, 55],[243, 115, 54],[243, 110, 55],[242, 98, 52],
-[240, 88, 51],[236, 79, 51],[233, 70, 52],[229, 59, 51],[224, 46, 51],[221, 36, 52],[216, 31, 53],[212, 31, 54],[207, 32, 54],[197, 32, 53],
-[183, 31, 50],[164, 29, 45],[146, 24, 39],[129, 20, 36],[110, 12, 31],[89, 11, 28],[73, 19, 27],[52, 17, 23],[42, 16, 20],[33, 11, 16]
-        ];
-        var retStyle = new ol.style.Style({
-        image: new ol.style.Circle({
-            fill: new ol.style.Fill({ color: colors[Math.round(feature.get("pm2_5"))] }),
-            stroke: new ol.style.Stroke({ color: [0,0,255,1] }),
-            radius: 5
-        })
-    });
-        return retStyle;
 
+if (feature.get("pm2_5") < 35 && feature.get("pm10") < 150) {
+        return new ol.style.Style({
+            image: new ol.style.Icon( ({
+          anchor: [0.5, 46],
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'pixels',
+          src: './img/wind.png'
+        }))})
+} else {
+    return new ol.style.Style({
+            image: new ol.style.Icon( ({
+          anchor: [0.5, 46],
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'pixels',
+          src: './img/sick.png'
+        }))})
+}
     };
 
-    var dust = new ol.layer.Vector({
+    var dust_liverpool = new ol.layer.Vector({
         title: 'Liverpool dust',
+        type:'dust',
         source: new ol.source.Vector({
             format: new ol.format.GeoJSON(),
             url: './api/dust-liverpool.php'
@@ -68,8 +79,23 @@ include_header();
         style: dustStyleFunction
     });
 
+    
+    var dust_luftdaten = new ol.layer.Vector({
+        title: 'Luftdaten dust',
+        type:'dust',
+        source: new ol.source.Vector({
+            format: new ol.format.GeoJSON(),
+            url: './api/dust-luftdaten.php'
+    //         attributions: [new ol.Attribution({
+    //   html: "Where it came from"
+    // })]
+        }),
+        style: dustStyleFunction
+    });
+
     var rfsfire = new ol.layer.Vector({
         title: 'RFS Current Incidents',
+        type: 'fire',
         source: new ol.source.Vector({
             format: new ol.format.GeoJSON(),
             url: './api/fire-rfs.php'
@@ -122,6 +148,7 @@ include_header();
    
     var sentinel = new ol.layer.Tile({
         title: 'Sentinel Bushfires',
+        visible: false,
         source: new ol.source.TileWMS({
             url: 'http://sentinel.ga.gov.au/geoserver/public/wms',
             params: {
@@ -141,15 +168,17 @@ include_header();
 
             new ol.layer.Tile({
                 title: 'Stamen Maps Terrain',
-                //type: 'base',
+                type: 'base',
                 source: new ol.source.Stamen({
                     layer: 'terrain'
                 })
-            }),            weather, dust,
-            //sentinel,
+            }), 
+                      // weather, 
+                       dust_liverpool, dust_luftdaten,
+            sentinel,
             heatisland,
             vegcover,
-            rfsfire
+           // rfsfire
         ],
         view: new ol.View({
             //map.getView().getZoom(); 10 
@@ -170,19 +199,33 @@ map.addOverlay(popup);
 
     map.on('click', function(evt) {
     var feature = map.forEachFeatureAtPixel(evt.pixel,
-      function(feature) {
-        return feature;
-      },
-      { layerFilter: function(candidate) { 
-        return true//(candidate === forest)
-      }
-    });
-
-    if (feature) {
+      function(feature, layer) {
+        var message;
+        if (layer.get("type") == 'weather') {
+            message = 'Temperature: ' + feature.get("primary").dt.toFixed(2) + '&deg;';
+        } else if (layer.get("type") == 'fire') {
+            message = '<a href="'feature.get("link")+
+            '">' + feature.get("title")"</a><br/>" + feature.get("description");
+        } else if (layer.get("type") == 'dust') {
+            message =  feature.get("name")+"<br>PM2.5:"+feature.get("pm2_5")+"<br/> PM10:"+feature.get("pm10");
+        } else {
+            function replacer(key, value) {
+  // Filtering out properties
+  if (key == 'geometry') {
+    return undefined;
+  }
+  return value;
+}
+            message = layer.get("title")+"-"+layer.get("type") +":" + JSON.stringify(feature.getProperties(), replacer);
+        }
         console.log(evt.coordinate)
-    popup.show(evt.coordinate, 'Temperature: ' + feature.get("primary").dt.toFixed(2) + '&deg;');
-    }
-  });
+    popup.show(evt.coordinate, message);
+      });
+    
+
+    
+    });
+  
 </script>
 </body>
 

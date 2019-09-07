@@ -96,7 +96,7 @@ function include_header($title = "I want to go to there") {
 	<!-- MAIN BODY -->
 	<main id="content">
 		<!--CONTENT-->
-		<div class="au-body au-body--alt banner">
+		<div class="au-body au-body--alt">
 			<div class="container-fluid">
 				<div class="row">
     <?php
@@ -116,7 +116,10 @@ function include_footer() {
 			<div class="row">
 				<nav class="col-md-12" aria-label="footer">
 					<ul class="au-link-list au-link-list--inline">
-						<li><a href="#">Privacy</a></li>
+						<li><a href="https://github.com/maxious/wannago">github</a></li>
+						<li><a href="https://hackerspace.govhack.org/projects/project_474">hackerspace page</a> </li>
+						<li><a href="https://twitter.com/maxious">twitter</a></li>
+						<li><a href="mailto:govhack@lambdacomplex.org">email</a></li>
 					</ul>
 				</nav>
 				<section class="col-sm-12">
