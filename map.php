@@ -35,6 +35,7 @@ main>.au-body {
     var weather = new ol.layer.Vector({
         title: 'BOM WOW weather',
         type: "weather",
+        visible: false,
         source: new ol.source.Vector({
             format: new ol.format.GeoJSON(),
             url: './api/weather-bomwow.php'
@@ -69,6 +70,7 @@ if (feature.get("pm2_5") < 35 && feature.get("pm10") < 150) {
     var dust_liverpool = new ol.layer.Vector({
         title: 'Liverpool dust',
         type:'dust',
+        visible: <?=($_REQUEST['region'] == 'sydney'? 'true':'false')?>,
         source: new ol.source.Vector({
             format: new ol.format.GeoJSON(),
             url: './api/dust-liverpool.php'
@@ -92,10 +94,23 @@ if (feature.get("pm2_5") < 35 && feature.get("pm10") < 150) {
         }),
         style: dustStyleFunction
     });
+    var dust_qld = new ol.layer.Vector({
+        title: 'Queensland Government dust',
+        type:'dust',
+        source: new ol.source.Vector({
+            format: new ol.format.GeoJSON(),
+            url: './api/dust-qld.php'
+    //         attributions: [new ol.Attribution({
+    //   html: "Where it came from"
+    // })]
+        }),
+        style: dustStyleFunction
+    });
 
     var rfsfire = new ol.layer.Vector({
         title: 'RFS Current Incidents',
         type: 'fire',
+        visible: <?=($_REQUEST['region'] == 'sydney'? 'true':'false')?>,
         source: new ol.source.Vector({
             format: new ol.format.GeoJSON(),
             url: './api/fire-rfs.php'
@@ -173,23 +188,45 @@ if (feature.get("pm2_5") < 35 && feature.get("pm10") < 150) {
                     layer: 'terrain'
                 })
             }), 
-                      // weather, 
-                       dust_liverpool, dust_luftdaten,
+                       weather, 
+                       dust_liverpool, dust_luftdaten, dust_qld,
             sentinel,
             heatisland,
             vegcover,
-           // rfsfire
+            rfsfire
         ],
         view: new ol.View({
-            //map.getView().getZoom(); 10 
+            
             projection: 'EPSG:4326',
+            //map.getView().getZoom(); 10 
             //map.getView().calculateExtent();
-            center: [151.0942840576172, -33.925824165344224], // 
-            // australia extent: [113.338953078, -43.6345972634, 153.569469029, -10.6681857235], 
+            <?php
+            if ($_REQUEST['region'] == 'sydney') {
+                echo '
+            center: [151.0942840576172, -33.925824165344224], 
             extent: [150.7308769226076, -34.22031998634341, 151.50953292846697, -33.633238077163725], //sydney
             zoom: 12,
             minZoom: 10,
             maxZoom: 16
+            ';
+            } else if ($_REQUEST['region'] == 'qld') {
+                echo '
+            center: [151.0942840576172, -33.925824165344224], 
+            extent: [128.84636772311333, -30.857151635534336, 161.34392631686333, -14.597386010534336], //qld
+            zoom: 6,
+            minZoom: 6,
+            maxZoom: 16
+            ';
+            } else {
+                echo '
+                center: [134.37218286877658, -28.636157167491735], 
+                extent: [113.338953078, -43.6345972634, 153.569469029, -10.6681857235], // australia
+                zoom: 12,
+                minZoom: 5,
+                maxZoom: 16
+                ';
+            }
+            ?>
         })
     });
     var layerSwitcher = new ol.control.LayerSwitcher();
@@ -204,8 +241,8 @@ map.addOverlay(popup);
         if (layer.get("type") == 'weather') {
             message = 'Temperature: ' + feature.get("primary").dt.toFixed(2) + '&deg;';
         } else if (layer.get("type") == 'fire') {
-            message = '<a href="'feature.get("link")+
-            '">' + feature.get("title")"</a><br/>" + feature.get("description");
+            message = '<a href="'+feature.get("link")+
+            '">' + feature.get("title")+"</a><br/>" + feature.get("description");
         } else if (layer.get("type") == 'dust') {
             message =  feature.get("name")+"<br>PM2.5:"+feature.get("pm2_5")+"<br/> PM10:"+feature.get("pm10");
         } else {

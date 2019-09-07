@@ -18,7 +18,7 @@ include_header();
     <li>http://bom-wow.metoffice.gov.uk</li>
     <li>Liverpool Smart Pedestrian project http://pavo.its.uow.edu.au:6969/dashboard</li>
 </ul>
-Air particulate levels good/bad based on US EPA National Ambient Air Quality Standards https://www.epa.gov/criteria-air-pollutants/naaqs-table
+Air particulate levels good/bad based on https://www.qld.gov.au/environment/pollution/monitoring/air/air-monitoring/air-quality-index but some datasets are used with current levels rather than 24 hour averages.
     All emojis designed by OpenMoji – the open-source emoji and icon project. License: CC BY-SA 4.0 https://github.com/hfg-gmuend/openmoji
   <?php
   include_footer();
