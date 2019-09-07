@@ -12,5 +12,6 @@ include_header();
     https://data.nsw.gov.au/data/dataset/nsw-rural-fire-service-current-incidents-feed
     https://australia.maps.luftdaten.info/#13/-33.8785/151.1461
     http://bom-wow.metoffice.gov.uk
+    Liverpool Smart Pedestrian project http://pavo.its.uow.edu.au:6969/dashboard
   <?php
   include_footer();
