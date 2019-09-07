@@ -49,7 +49,7 @@ include_header();
           anchor: [0.5, 46],
           anchorXUnits: 'fraction',
           anchorYUnits: 'pixels',
-          src: './img/E08A.png'
+          src: './img/wildfire.png'
         }))})
     });
     
