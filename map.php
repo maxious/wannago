@@ -197,7 +197,58 @@ if (feature.get("pm2_5") < 35 && feature.get("pm10") < 150) {
     // })]
         })
     });
-   
+    var grassyStyleFunction = function(feature) {
+
+if (feature.get("PerAnyTree") < 5) {
+        return new ol.style.Style({
+            image: new ol.style.Icon( ({
+          anchor: [0.5, 46],
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'pixels',
+          src: './img/seedling.png'
+        }))})
+} else  {
+    return new ol.style.Style({
+            image: new ol.style.Icon( ({
+          anchor: [0.5, 46],
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'pixels',
+          src: './img/tree.png'
+        }))})
+}
+    };
+    var sydparks = new ol.layer.Vector({
+        title: 'Sydney Grassy Areas',
+        type: 'grassy',
+        visible: <?=($_REQUEST['region'] == 'sydney'? 'true':'false')?>,
+        source: new ol.source.Vector({
+            format: new ol.format.GeoJSON(),
+            url: './api/parks-sydney.php'
+    //         attributions: [new ol.Attribution({
+    //   html: "Where it came from"
+    // })]
+        }),
+        style: grassyStyleFunction
+    });
+    var sydhotspots = new ol.layer.Vector({
+        title: 'Sydney Urban Heat Island points',
+        type: 'other',
+        visible: <?=($_REQUEST['region'] == 'sydney'? 'true':'false')?>,
+        source: new ol.source.Vector({
+            format: new ol.format.GeoJSON(),
+            url: './api/hotspots-sydney.php'
+    //         attributions: [new ol.Attribution({
+    //   html: "Where it came from"
+    // })]
+        }),
+        style: new ol.style.Style({
+            image: new ol.style.Icon( ({
+          anchor: [0.5, 46],
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'pixels',
+          src: './img/hot.png'
+        }))})
+    });
     var sentinel = new ol.layer.Tile({
         title: 'Sentinel Bushfires',
         visible: false,
@@ -226,6 +277,7 @@ if (feature.get("pm2_5") < 35 && feature.get("pm10") < 150) {
                 })
             }), darwinpark,
                        weather, 
+                       sydparks, sydhotspots,
                        dust_liverpool, dust_luftdaten, dust_qld, dust_darwin,
             sentinel,
             heatisland,
@@ -280,12 +332,19 @@ if (feature.get("pm2_5") < 35 && feature.get("pm10") < 150) {
 map.addOverlay(popup);
 
     map.on('click', function(evt) {
+        var didsomething;
     var feature = map.forEachFeatureAtPixel(evt.pixel,
       function(feature, layer) {
         var message;
         if (layer.get("type") == 'weather') {
             message = 'Temperature: ' + feature.get("primary").dt.toFixed(2) + '&deg;';
         } else if (layer.get("type") == 'fire') {
+            message = '<a href="'+feature.get("link")+
+            '">' + feature.get("title")+"</a><br/>" + feature.get("description");
+          }  else if (layer.get("type") == 'grassy') {
+                //"PerGrass": 0.91409697147184077, "PerShrub": 1.2157842713987188, "PerTr03_10": 3.9416249089899611, "PerTr10_15": 1.800038273512522, "PerTr15mPl": 1.223678059783494,
+                // "PerAnyTree": 6.9653412422859775, "PerShrTr": 8.1811255136846945, "PerAnyVeg": 9.0952224851565351, "PerNonVeg": 90.90477751484346, 
+                 
             message = '<a href="'+feature.get("link")+
             '">' + feature.get("title")+"</a><br/>" + feature.get("description");
         } else if (layer.get("type") == 'dust') {
@@ -301,9 +360,33 @@ map.addOverlay(popup);
 }
             message = layer.get("title")+"-"+layer.get("type") +":" + JSON.stringify(feature.getProperties(), replacer);
         }
-        console.log(evt.coordinate)
+        //console.log(evt.coordinate)
     popup.show(evt.coordinate, message);
+    didsomething = true;
+    return feature;
       });
+      if (!didsomething) {
+        console.log(evt.coordinate)
+
+        fetch('./api/weather-silo.php?lat='+evt.coordinate[1]+'&lon='+evt.coordinate[0])
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(myJson) {
+      var data = myJson.data[0].variables;
+      var min_temp = 0;
+      var max_temp = 0;
+      data.forEach(function(datum) {
+          if (datum.variable_code == 'max_temp') {
+max_temp = datum.value;
+          }
+else {
+    min_temp = datum.value;
+}
+      });
+    popup.show(evt.coordinate, "Recent temperatures in this area were between "+ min_temp + '&deg; and '+max_temp+'&deg;');
+  })
+      }
     
 
     
