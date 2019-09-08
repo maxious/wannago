@@ -199,7 +199,7 @@ if (feature.get("pm2_5") < 35 && feature.get("pm10") < 150) {
     });
     var grassyStyleFunction = function(feature) {
 
-if (feature.get("PerAnyTree") < 5) {
+if (feature.get("PerAnyTree") < 50) {
         return new ol.style.Style({
             image: new ol.style.Icon( ({
           anchor: [0.5, 46],
@@ -342,11 +342,7 @@ map.addOverlay(popup);
             message = '<a href="'+feature.get("link")+
             '">' + feature.get("title")+"</a><br/>" + feature.get("description");
           }  else if (layer.get("type") == 'grassy') {
-                //"PerGrass": 0.91409697147184077, "PerShrub": 1.2157842713987188, "PerTr03_10": 3.9416249089899611, "PerTr10_15": 1.800038273512522, "PerTr15mPl": 1.223678059783494,
-                // "PerAnyTree": 6.9653412422859775, "PerShrTr": 8.1811255136846945, "PerAnyVeg": 9.0952224851565351, "PerNonVeg": 90.90477751484346, 
-                 
-            message = '<a href="'+feature.get("link")+
-            '">' + feature.get("title")+"</a><br/>" + feature.get("description");
+            message = 'This Parkland is '+feature.get("PerGrass")+'% grass, '+feature.get("PerShrub")+'% shrub and '+feature.get("PerAnyTree")+'% trees';
         } else if (layer.get("type") == 'dust') {
             message =  feature.get("name")+"<br>PM2.5: "+feature.get("pm2_5")+"<br/> PM10: "+feature.get("pm10")
             +"<br/><small><a href='https://www.qld.gov.au/environment/pollution/monitoring/air/air-monitoring/air-quality-index' target='_blank'>Learn more about PM2.5/PM10 air quality indicators...</a></small>" ;
