@@ -2,7 +2,7 @@
 imagine you want to go out for a picnic, fly a drone or train for state of origin. is it a good day? where should you go and how should you get there? will there be trees there?
 
 
-stretch to darwin https://hackerspace.govhack.org/challenges/community_open_data_weather_monitoring_and_alerts_system
+stretch to darwin 
 
 http://open-darwin.opendata.arcgis.com/search?tags=Parks
 http://open-darwin.opendata.arcgis.com/datasets/238004152d184aa89df8c8f6f4a4ff1c_0 

@@ -127,6 +127,30 @@ if (feature.get("pm2_5") < 35 && feature.get("pm10") < 150) {
         }))})
     });
     
+    
+    var darwinpark = new ol.layer.Vector({
+        title: 'Darwin Parks',
+        type: 'parks',
+        visible: <?=($_REQUEST['region'] == 'darwin'? 'true':'false')?>,
+        source: new ol.source.Vector({
+            format: new ol.format.GeoJSON(),
+            url: './api/parks-darwin.php'
+    //         attributions: [new ol.Attribution({
+    //   html: "Where it came from"
+    // })]
+        }),
+        style: new ol.style.Style({
+
+          stroke: new ol.style.Stroke({
+            color: 'green',
+            width: 1
+          }),
+          fill: new ol.style.Fill({
+            color: 'rgba(34,139,34, 0.7)'
+          })
+        })
+    });
+
 //     Urban Heat Island (0)
 // Heat Vulnerability Index (1)
 // Urban Veg Cover - Percent All Veg (2)
@@ -193,7 +217,7 @@ if (feature.get("pm2_5") < 35 && feature.get("pm10") < 150) {
             sentinel,
             heatisland,
             vegcover,
-            rfsfire
+            rfsfire, darwinpark
         ],
         view: new ol.View({
             
@@ -217,11 +241,19 @@ if (feature.get("pm2_5") < 35 && feature.get("pm10") < 150) {
             minZoom: 6,
             maxZoom: 16
             ';
-            } else {
+            } else if ($_REQUEST['region'] == 'darwin') {
                 echo '
-                center: [134.37218286877658, -28.636157167491735], 
+            center: [130.90373182880757, -12.440307702414483], 
+            extent: [130.6498446522939, -12.567337121359795, 131.15761900532124, -12.31327828346917], //darwin
+            zoom: 12,
+            minZoom: 10,
+            maxZoom: 16
+            ';
+            }else {
+                echo '
+                center: [134.37218286877658, -22.636157167491735], 
                 extent: [113.338953078, -43.6345972634, 153.569469029, -10.6681857235], // australia
-                zoom: 12,
+                zoom: 5,
                 minZoom: 5,
                 maxZoom: 16
                 ';

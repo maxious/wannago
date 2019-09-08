@@ -1,0 +1,2 @@
+<?php
+// https://services6.arcgis.com/tVfesLETUHNU9Vna/ArcGIS/rest/services/City_of_Darwin_Temperature_IoT/FeatureServer/0/query?where=time+%3E%3D+TIMESTAMP+%272019-09-05+00%3A00%3A00%27&objectIds=&time=&resultType=none&outFields=*&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&sqlFormat=none&f=pjson&token=

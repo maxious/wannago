@@ -1,3 +1,5 @@
 api/*.json
 api/*.csv
 api/*.xml
+api/*.txt
+api/*.pbuf
