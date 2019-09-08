@@ -26,7 +26,7 @@ foreach($data->features as &$feature) {
  //echo $feature->properties->DeviceId." ";
  if (array_key_exists($feature->properties->DeviceId,$data_pm10)) {
  ksort($data_pm10[$feature->properties->DeviceId]);
- echo array_values($data_pm10[$feature->properties->DeviceId])[0];
+ //echo array_values($data_pm10[$feature->properties->DeviceId])[0];
  $feature->properties->pm10 = array_values($data_pm10[$feature->properties->DeviceId])[0];
  $feature->properties->pm2_5 = array_values($data_pm2_5[$feature->properties->DeviceId])[0];
  $feature->properties->name =  $feature->properties->MXLOCATION;

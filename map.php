@@ -56,7 +56,7 @@ if (feature.get("pm2_5") < 35 && feature.get("pm10") < 150) {
           anchorYUnits: 'pixels',
           src: './img/wind.png'
         }))})
-} else {
+} else if(feature.get("pm2_5") > -1000) {
     return new ol.style.Style({
             image: new ol.style.Icon( ({
           anchor: [0.5, 46],
@@ -97,6 +97,7 @@ if (feature.get("pm2_5") < 35 && feature.get("pm10") < 150) {
     var dust_qld = new ol.layer.Vector({
         title: 'Queensland Government dust',
         type:'dust',
+        visible: <?=($_REQUEST['region'] == 'qld'? 'true':'false')?>,
         source: new ol.source.Vector({
             format: new ol.format.GeoJSON(),
             url: './api/dust-qld.php'
@@ -106,7 +107,19 @@ if (feature.get("pm2_5") < 35 && feature.get("pm10") < 150) {
         }),
         style: dustStyleFunction
     });
-
+    var dust_darwin = new ol.layer.Vector({
+        title: 'Darwin dust',
+        type:'dust',
+        visible: <?=($_REQUEST['region'] == 'darwin'? 'true':'false')?>,
+        source: new ol.source.Vector({
+            format: new ol.format.GeoJSON(),
+            url: './api/dust-darwin.php'
+    //         attributions: [new ol.Attribution({
+    //   html: "Where it came from"
+    // })]
+        }),
+        style: dustStyleFunction
+    });
     var rfsfire = new ol.layer.Vector({
         title: 'RFS Current Incidents',
         type: 'fire',
@@ -211,13 +224,13 @@ if (feature.get("pm2_5") < 35 && feature.get("pm10") < 150) {
                 source: new ol.source.Stamen({
                     layer: 'terrain'
                 })
-            }), 
+            }), darwinpark,
                        weather, 
-                       dust_liverpool, dust_luftdaten, dust_qld,
+                       dust_liverpool, dust_luftdaten, dust_qld, dust_darwin,
             sentinel,
             heatisland,
             vegcover,
-            rfsfire, darwinpark
+            rfsfire, 
         ],
         view: new ol.View({
             
@@ -276,7 +289,8 @@ map.addOverlay(popup);
             message = '<a href="'+feature.get("link")+
             '">' + feature.get("title")+"</a><br/>" + feature.get("description");
         } else if (layer.get("type") == 'dust') {
-            message =  feature.get("name")+"<br>PM2.5:"+feature.get("pm2_5")+"<br/> PM10:"+feature.get("pm10");
+            message =  feature.get("name")+"<br>PM2.5: "+feature.get("pm2_5")+"<br/> PM10: "+feature.get("pm10")
+            +"<br/><small><a href='https://www.qld.gov.au/environment/pollution/monitoring/air/air-monitoring/air-quality-index' target='_blank'>Learn more about PM2.5/PM10 air quality indicators...</a></small>" ;
         } else {
             function replacer(key, value) {
   // Filtering out properties
