@@ -8,8 +8,10 @@ api_headers();
 // https://services6.arcgis.com/tVfesLETUHNU9Vna/ArcGIS/rest/services
 $data = json_decode(file_get_contents ('darwin-devices.json'));
 $j_data_pm10 = json_decode(file_get_contents ('darwin-pm10.json'));
+//$j_data_pm10 = json_decode(file_get_contents ('https://services6.arcgis.com/tVfesLETUHNU9Vna/ArcGIS/rest/services/City_of_Darwin_PM10_IoT/FeatureServer/0/query?where=time+%3E%3D+TIMESTAMP+%27'.date("Y-m-d").'+12%3A00%3A00%27&objectIds=&time=&resultType=none&outFields=*&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&sqlFormat=none&f=pjson&token='));
 $data_pm10 = Array();
 $j_data_pm2_5 = json_decode(file_get_contents ('darwin-pm25.json'));
+//$j_data_pm2_5 = json_decode(file_get_contents ('https://services6.arcgis.com/tVfesLETUHNU9Vna/ArcGIS/rest/services/City_of_Darwin_PM2_5_IoT/FeatureServer/0/query?where=time+%3E%3D+TIMESTAMP+%27'.date("Y-m-d").'+12%3A00%3A00%27&objectIds=&time=&resultType=none&outFields=*&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&sqlFormat=none&f=pjson&token='));
 $data_pm2_5 = Array();
 
 

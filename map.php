@@ -35,7 +35,7 @@ main>.au-body {
     var weather = new ol.layer.Vector({
         title: 'BOM WOW weather',
         type: "weather",
-        visible: false,
+        visible: true,
         source: new ol.source.Vector({
             format: new ol.format.GeoJSON(),
             url: './api/weather-bomwow.php'
@@ -251,7 +251,7 @@ if (feature.get("PerAnyTree") < 50) {
     });
     var sentinel = new ol.layer.Tile({
         title: 'Sentinel Bushfires',
-        visible: false,
+        visible: true,
         source: new ol.source.TileWMS({
             url: 'http://sentinel.ga.gov.au/geoserver/public/wms',
             params: {
@@ -300,7 +300,7 @@ if (feature.get("PerAnyTree") < 50) {
             ';
             } else if ($_REQUEST['region'] == 'qld') {
                 echo '
-            center: [151.0942840576172, -33.925824165344224], 
+            center: [147.41256900567157, -22.915103999442707], 
             extent: [128.84636772311333, -30.857151635534336, 161.34392631686333, -14.597386010534336], //qld
             zoom: 6,
             minZoom: 6,

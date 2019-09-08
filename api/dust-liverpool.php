@@ -12,7 +12,8 @@ api_headers();
 //     "long": "150.923788"
 //   },
 
-$j_data = json_decode(file_get_contents ('liverpool.json'));
+//$j_data = json_decode(file_get_contents ('liverpool.json'));
+$j_data = json_decode(file_get_contents ('http://pavo.its.uow.edu.au:6969/api/sensor-data/air/by-period/'.date("Y-m-d").','.date("Y-m-d")));
 $data = array();
 foreach($j_data as $j) {
     $data[$j->name][$j->ts] = $j;

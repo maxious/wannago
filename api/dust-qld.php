@@ -5,7 +5,8 @@ api_headers();
 
 
 $data = array();
-$xml = DOMDocument::loadXML (file_get_contents ('qld.xml'));
+//$xml = DOMDocument::loadXML (file_get_contents ('qld.xml'));
+$xml = DOMDocument::loadXML (file_get_contents ('https://environment.des.qld.gov.au/cgi-bin/air/xml.php?category=1&region=ALL'));
 
 # Build GeoJSON feature collection array
 $geojson = array(
